@@ -1,0 +1,4 @@
+.ide*
+/vendor/
+/logs/*
+!/logs/README.md
