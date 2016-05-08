@@ -2,7 +2,7 @@
   "name": "sprunka/cybernet-api",
   "description": "This is an API for use with OGL Cybernet Character Builder.",
   "minimum-stability": "dev",
-  "license": "cc-by-sa",
+  "license": "MIT",
   "authors": [
     {
       "name": "Sean Prunka",
