@@ -1,7 +1,0 @@
-.ide*
-vendor/
-/vendor/
-logs/*
-/logs/*
-!logs/README.md
-!/logs/README.md
