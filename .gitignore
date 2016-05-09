@@ -1,0 +1,4 @@
+/vendor/*
+/logs/*
+!/logs/.placeholder
+/config/db.php
