@@ -8,5 +8,17 @@
       "name": "Sean Prunka",
       "email": "sprunka@gmail.com"
     }
-  ]s
+  ],
+  "require": {
+    "slim/slim": "3.3.0",
+    "slim/http": "0.1.0",
+    "slim/pdo": "1.9.8",
+    "slim/csrf": "0.6.0",
+    "monolog/monolog": "2.0.x-dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "CybernetAPI\\": "src"
+    }
+  }
 }
