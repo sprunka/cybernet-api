@@ -9,8 +9,8 @@
 namespace CybernetAPI;
 
 
-class AbsrtactRoute
-{  
+class AbstractRoute
+{
     public function __construct($container)
     {
         $this->container = $container;
