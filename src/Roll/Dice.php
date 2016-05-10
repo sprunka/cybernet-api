@@ -22,8 +22,8 @@ class Dice extends Route
 
     public function __invoke(Request $request, Response $response)
     {
-        $pattern = $request->getAttribute('pattern', '1d20');
-        $this->rule = $request->getAttribute('rule');
+        $pattern = strtolower($request->getAttribute('pattern', '1d20'));
+        $this->rule = strtolower($request->getAttribute('rule'));
         //TODO: For future implementation of multiple rules.
         //$this->rules =  explode('/', $request->getAttribute('rules'));
 
@@ -41,21 +41,28 @@ class Dice extends Route
         $this->roll['rolls'] = [];
 
         switch ($this->rule) {
-            case 'rak':
+            case 'rad1':
+            case 'rad2':
+                $drop = substr($this->rule, -1, 1);
+                if ($this->pool <= $drop) {
+                    $this->container->logger->error('Roll and Drop ' . $drop . ' requires a pool greater than ' . $drop);
+                    throw new \Exception('Roll and Drop ' . $drop . ' requires a pool greater than ' . $drop);
+                }
                 $this->basicRoll();
-                $this->rak();
+                $this->rad($drop);
                 break;
             case 'rr1s':
-                if ($this->sides <= 1) {
-                    throw new \Exception('To use ReRoll 1s the number of sides must be greater than 1.');
-                }
-                $this->basicRoll(true, 1);
-                break;
             case 'rr2s':
-                if ($this->sides <= 2) {
-                    throw new \Exception('To use ReRoll 2s the number of sides must be greater than 2.');
+                $drop = substr($this->rule, -2, 1);
+                if ($this->sides <= $drop) {
+                    $this->container->logger->error('To use ReRoll ' . $drop . 's the number of sides must be greater than ' . $drop . '.');
+                    throw new \Exception('To use ReRoll ' . $drop . 's the number of sides must be greater than ' . $drop . '.');
                 }
-                $this->basicRoll(true, 2);
+                $this->basicRoll(true, $drop);
+                break;
+            case 'sort':
+                $this->basicRoll();
+                rsort($this->roll['rolls']);
                 break;
             default:
                 $this->basicRoll();
@@ -78,12 +85,15 @@ class Dice extends Route
 
     }
 
-    protected function rak()
+    protected function rad($drop = 1)
     {
-        if ($this->pool <= 1) {
-            throw new \Exception('RAK requires a pool greater than 1.');
-        } else {
-            $this->roll['throwaway'] = array_pop($this->roll['rolls']);
+        for ($drops = 0; $drops < $drop; $drops++) {
+            $lowestRoll = min($this->roll['rolls']);
+            $trash = array_keys($this->roll['rolls'], $lowestRoll);
+            $trashKey = array_shift($trash);
+            $this->roll['throwaway'][] = $this->roll['rolls'][$trashKey];
+            unset($this->roll['rolls'][$trashKey]);
+            $this->roll['rolls'] = array_merge($this->roll['rolls']);
         }
     }
 
@@ -93,6 +103,5 @@ class Dice extends Route
             $currRoll = $this->roll($reRoll, $minRoll);
             $this->roll['rolls'][] = $currRoll;
         }
-        rsort($this->roll['rolls']);
     }
 }
