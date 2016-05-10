@@ -40,22 +40,26 @@ class Dice extends Route
         $this->roll['total'] = 0;
         $this->roll['rolls'] = [];
 
-        for ($rollNum = 1; $rollNum <= $this->pool; $rollNum++) {
-            $currRoll = $this->roll();
-            $this->roll['rolls'][] = $currRoll;
-        }
-
-        rsort($this->roll['rolls']);
-
         switch ($this->rule) {
             case 'rak':
+                $this->basicRoll();
                 $this->rak();
                 break;
+            case 'rr1s':
+                if ($this->sides <= 1) {
+                    throw new \Exception('To use ReRoll 1s the number of sides must be greater than 1.');
+                }
+                $this->basicRoll(true, 1);
+                break;
+            case 'rr2s':
+                if ($this->sides <= 2) {
+                    throw new \Exception('To use ReRoll 2s the number of sides must be greater than 2.');
+                }
+                $this->basicRoll(true, 2);
+                break;
             default:
-
+                $this->basicRoll();
         }
-
-
 
         $this->roll['total'] = array_sum($this->roll['rolls']);
 
@@ -64,9 +68,14 @@ class Dice extends Route
         return $jsonResponse;
     }
 
-    protected function roll()
+    protected function roll($reRoll = false, $minRoll = 1)
     {
-        return rand(1, $this->sides);
+        $currentRoll = rand(1, $this->sides);
+        if ($reRoll && $currentRoll <= $minRoll) {
+            $currentRoll = $this->roll($reRoll, $minRoll);
+        }
+        return $currentRoll;
+
     }
 
     protected function rak()
@@ -76,5 +85,14 @@ class Dice extends Route
         } else {
             $this->roll['throwaway'] = array_pop($this->roll['rolls']);
         }
+    }
+
+    protected function basicRoll($reRoll = false, $minRoll = 1)
+    {
+        for ($rollNum = 1; $rollNum <= $this->pool; $rollNum++) {
+            $currRoll = $this->roll($reRoll, $minRoll);
+            $this->roll['rolls'][] = $currRoll;
+        }
+        rsort($this->roll['rolls']);
     }
 }
