@@ -19,6 +19,7 @@ class Dice extends Route
     protected $roll = [];
     protected $sides = 20;
     protected $pool = 1;
+    protected $bonus = 0;
 
     public function __invoke(Request $request, Response $response)
     {
@@ -31,7 +32,18 @@ class Dice extends Route
             $this->container->logger->error("Bad Pattern: " . $pattern);
             throw new \Exception('Bad pattern given');
         }
-        list($this->pool, $this->sides) = explode('d', $pattern);
+        list($this->pool, $tempSides) = explode('d', $pattern);
+
+        if (stristr($tempSides,' ')) {
+            list($this->sides, $this->bonus) = explode(' ',$tempSides);
+        } elseif (stristr($tempSides,'-')) {
+            list($this->sides, $this->bonus) = explode('-',$tempSides);
+            $this->bonus = - (int) $this->bonus;
+        } else {
+            $this->sides = $tempSides;
+        }
+
+
 
         //TODO: Add more error checking against $pool and $sides being integers?
         $this->pool = ($this->pool !== '' ? (int)$this->pool : 1);
@@ -68,7 +80,7 @@ class Dice extends Route
                 $this->basicRoll();
         }
 
-        $this->roll['total'] = array_sum($this->roll['rolls']);
+        $this->roll['total'] = array_sum($this->roll['rolls']) + $this->bonus;
 
         $jsonResponse = $response->withJson($this->roll);
 
