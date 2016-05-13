@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Sean
- * Date: 2016.05.08
- * Time: 00:07
- */
 
 namespace CybernetAPI\Roll;
 
@@ -12,15 +6,43 @@ use CybernetAPI\AbstractRoute as Route;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
+/**
+ * Class Dice
+ * @package CybernetAPI\Roll
+ */
 class Dice extends Route
 {
+    /**
+     * @var null
+     */
     protected $rule = null;
+    /**
+     * @var array
+     */
     protected $rules = [];
+    /**
+     * @var array
+     */
     protected $roll = [];
+    /**
+     * @var int
+     */
     protected $sides = 20;
+    /**
+     * @var int
+     */
     protected $pool = 1;
+    /**
+     * @var int
+     */
     protected $bonus = 0;
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return string JSON Encoded
+     * @throws \Exception
+     */
     public function __invoke(Request $request, Response $response)
     {
         $pattern = strtolower($request->getAttribute('pattern', '1d20'));
@@ -34,16 +56,14 @@ class Dice extends Route
         }
         list($this->pool, $tempSides) = explode('d', $pattern);
 
-        if (stristr($tempSides,' ')) {
-            list($this->sides, $this->bonus) = explode(' ',$tempSides);
-        } elseif (stristr($tempSides,'-')) {
-            list($this->sides, $this->bonus) = explode('-',$tempSides);
-            $this->bonus = - (int) $this->bonus;
+        if (stristr($tempSides, ' ')) {
+            list($this->sides, $this->bonus) = explode(' ', $tempSides);
+        } elseif (stristr($tempSides, '-')) {
+            list($this->sides, $this->bonus) = explode('-', $tempSides);
+            $this->bonus = -(int)$this->bonus;
         } else {
             $this->sides = $tempSides;
         }
-
-
 
         //TODO: Add more error checking against $pool and $sides being integers?
         $this->pool = ($this->pool !== '' ? (int)$this->pool : 1);
@@ -79,14 +99,28 @@ class Dice extends Route
             default:
                 $this->basicRoll();
         }
-
         $this->roll['total'] = array_sum($this->roll['rolls']) + $this->bonus;
-
         $jsonResponse = $response->withJson($this->roll);
-
         return $jsonResponse;
     }
 
+    /**
+     * @param bool $reRoll
+     * @param int $minRoll
+     */
+    protected function basicRoll($reRoll = false, $minRoll = 1)
+    {
+        for ($rollNum = 1; $rollNum <= $this->pool; $rollNum++) {
+            $currRoll = $this->roll($reRoll, $minRoll);
+            $this->roll['rolls'][] = $currRoll;
+        }
+    }
+
+    /**
+     * @param bool $reRoll
+     * @param int $minRoll
+     * @return int
+     */
     protected function roll($reRoll = false, $minRoll = 1)
     {
         $currentRoll = rand(1, $this->sides);
@@ -94,9 +128,11 @@ class Dice extends Route
             $currentRoll = $this->roll($reRoll, $minRoll);
         }
         return $currentRoll;
-
     }
 
+    /**
+     * @param int $drop
+     */
     protected function rad($drop = 1)
     {
         for ($drops = 0; $drops < $drop; $drops++) {
@@ -106,14 +142,6 @@ class Dice extends Route
             $this->roll['throwaway'][] = $this->roll['rolls'][$trashKey];
             unset($this->roll['rolls'][$trashKey]);
             $this->roll['rolls'] = array_merge($this->roll['rolls']);
-        }
-    }
-
-    protected function basicRoll($reRoll = false, $minRoll = 1)
-    {
-        for ($rollNum = 1; $rollNum <= $this->pool; $rollNum++) {
-            $currRoll = $this->roll($reRoll, $minRoll);
-            $this->roll['rolls'][] = $currRoll;
         }
     }
 }
