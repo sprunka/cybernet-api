@@ -81,16 +81,16 @@ class Dice extends Route
                     throw new \Exception('Roll and Drop ' . $drop . ' requires a pool greater than ' . $drop);
                 }
                 $this->basicRoll();
-                $this->rad($drop);
+                $this->rollAndDropLowestDice($drop);
                 break;
             case 'rr1s':
             case 'rr2s':
-                $drop = substr($this->rule, -2, 1);
-                if ($this->sides <= $drop) {
-                    $this->container->logger->error('To use ReRoll ' . $drop . 's the number of sides must be greater than ' . $drop . '.');
-                    throw new \Exception('To use ReRoll ' . $drop . 's the number of sides must be greater than ' . $drop . '.');
+                $numberToReRoll = substr($this->rule, -2, 1);
+                if ($this->sides <= $numberToReRoll) {
+                    $this->container->logger->error('To use ReRoll ' . $numberToReRoll . 's the number of sides must be greater than ' . $numberToReRoll . '.');
+                    throw new \Exception('To use ReRoll ' . $numberToReRoll . 's the number of sides must be greater than ' . $numberToReRoll . '.');
                 }
-                $this->basicRoll(true, $drop);
+                $this->rerollThresholdAndBelow($numberToReRoll);
                 break;
             case 'sort':
                 $this->basicRoll();
@@ -100,32 +100,39 @@ class Dice extends Route
                 $this->basicRoll();
         }
         $this->roll['total'] = array_sum($this->roll['rolls']) + $this->bonus;
-        $jsonResponse = $response->withJson($this->roll);
+        $jsonResponse = $response->withJson($this->roll,200);
         return $jsonResponse;
     }
 
     /**
-     * @param bool $reRoll
-     * @param int $minRoll
+     * @param int $numberToReRoll
      */
-    protected function basicRoll($reRoll = false, $minRoll = 1)
+    protected function rerollThresholdAndBelow(int $numberToReRoll)
     {
         for ($rollNum = 1; $rollNum <= $this->pool; $rollNum++) {
-            $currRoll = $this->roll($reRoll, $minRoll);
+            $currRoll = $this->getNewRoll(true, $numberToReRoll);
+            $this->roll['rolls'][] = $currRoll;
+        }
+    }
+
+    protected function basicRoll()
+    {
+        for ($rollNum = 1; $rollNum <= $this->pool; $rollNum++) {
+            $currRoll = $this->getNewRoll();
             $this->roll['rolls'][] = $currRoll;
         }
     }
 
     /**
-     * @param bool $reRoll
-     * @param int $minRoll
+     * @param bool $doReRoll
+     * @param int $numberToReRoll
      * @return int
      */
-    protected function roll($reRoll = false, $minRoll = 1)
+    protected function getNewRoll(bool $doReRoll = false, int $numberToReRoll = 0)
     {
         $currentRoll = rand(1, $this->sides);
-        if ($reRoll && $currentRoll <= $minRoll) {
-            $currentRoll = $this->roll($reRoll, $minRoll);
+        if ($doReRoll && $currentRoll <= $numberToReRoll) {
+            $currentRoll = $this->getNewRoll($doReRoll, $numberToReRoll);
         }
         return $currentRoll;
     }
@@ -133,7 +140,7 @@ class Dice extends Route
     /**
      * @param int $drop
      */
-    protected function rad($drop = 1)
+    protected function rollAndDropLowestDice(int $drop)
     {
         for ($drops = 0; $drops < $drop; $drops++) {
             $lowestRoll = min($this->roll['rolls']);
