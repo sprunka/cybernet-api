@@ -1,4 +1,8 @@
 <?php
+use Psr7Middlewares\Middleware;
+
+putenv("ENV=dev");
+
 
 require '../vendor/autoload.php';
 $config = [];
@@ -10,7 +14,10 @@ $container = $app->getContainer();
 // Configure the Containers.
 require_once '../config/containers.php';
 
-// Routes
+$app->add(Middleware::TrailingSlash(false)->redirect(301))
+    ->add(Middleware::ResponseTime())
+    ->add(Middleware::FormatNegotiator()->defaultFormat('json'));
+
 require_once '../routing/routes.php';
 
 $app->run();
