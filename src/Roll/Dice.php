@@ -85,6 +85,15 @@ class Dice extends Route
         $this->roll['rolls'] = [];
 
         switch ($this->rule) {
+            case 'rak3':
+                $keep = substr($this->rule, -1, 1);
+                if ($this->pool < $keep) {
+                    $this->container->logger->error('Roll and Keep ' . $keep . ' requires a pool equal to or greater than ' . $keep);
+                    throw new \Exception('Roll and Drop ' . $keep . ' requires a pool equal to or greater than ' . $keep);
+                }
+                $this->basicRoll();
+                $this->rollAndKeep($keep);
+                break;
             case 'rad1':
             case 'rad2':
                 $drop = substr($this->rule, -1, 1);
@@ -163,5 +172,25 @@ class Dice extends Route
             $currRoll = $this->getNewRoll(true, $numberToReRoll);
             $this->roll['rolls'][] = $currRoll;
         }
+    }
+
+    /**
+     * @param int $keep
+     */
+    protected function rollAndKeep(int $keep)
+    {
+        $trash = $this->roll['rolls'];
+        $keepers = [];
+
+        for ($checks = 0; $checks < $keep; $checks++) {
+            $bestRoll = max($trash);
+            $keepKeys = array_keys($trash, $bestRoll);
+            $keepKey = array_shift($keepKeys);
+            $keepers[] = $trash[$keepKey];
+            unset($trash[$keepKey]);
+            $trash = array_merge($trash);
+        }
+        $this->roll['rolls'] = $keepers;
+        $this->roll['throwaway'] = $trash;
     }
 }
