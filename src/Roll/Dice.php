@@ -38,6 +38,18 @@ class Dice extends Route
     protected $bonus = 0;
 
     /**
+     * @var \Faker\Generator
+     */
+    protected $faker;
+
+    public function __construct($container)
+    {
+        parent::__construct($container);
+        /** @var \Faker\Generator faker */
+        $this->faker = $this->container->faker;
+    }
+
+    /**
      * @param Request $request
      * @param Response $response
      * @return string JSON Encoded
@@ -100,19 +112,8 @@ class Dice extends Route
                 $this->basicRoll();
         }
         $this->roll['total'] = array_sum($this->roll['rolls']) + $this->bonus;
-        $jsonResponse = $response->withJson($this->roll,200);
+        $jsonResponse = $response->withJson($this->roll, 200);
         return $jsonResponse;
-    }
-
-    /**
-     * @param int $numberToReRoll
-     */
-    protected function rerollThresholdAndBelow(int $numberToReRoll)
-    {
-        for ($rollNum = 1; $rollNum <= $this->pool; $rollNum++) {
-            $currRoll = $this->getNewRoll(true, $numberToReRoll);
-            $this->roll['rolls'][] = $currRoll;
-        }
     }
 
     protected function basicRoll()
@@ -130,7 +131,8 @@ class Dice extends Route
      */
     protected function getNewRoll(bool $doReRoll = false, int $numberToReRoll = 0)
     {
-        $currentRoll = rand(1, $this->sides);
+        $currentRoll = $this->faker->numberBetween(1, $this->sides);
+
         if ($doReRoll && $currentRoll <= $numberToReRoll) {
             $currentRoll = $this->getNewRoll($doReRoll, $numberToReRoll);
         }
@@ -149,6 +151,17 @@ class Dice extends Route
             $this->roll['throwaway'][] = $this->roll['rolls'][$trashKey];
             unset($this->roll['rolls'][$trashKey]);
             $this->roll['rolls'] = array_merge($this->roll['rolls']);
+        }
+    }
+
+    /**
+     * @param int $numberToReRoll
+     */
+    protected function rerollThresholdAndBelow(int $numberToReRoll)
+    {
+        for ($rollNum = 1; $rollNum <= $this->pool; $rollNum++) {
+            $currRoll = $this->getNewRoll(true, $numberToReRoll);
+            $this->roll['rolls'][] = $currRoll;
         }
     }
 }
