@@ -13,10 +13,6 @@ use Slim\Http\Response as Response;
 class Dice extends Route
 {
     /**
-     * @var null
-     */
-    protected $rule = null;
-    /**
      * @var array
      */
     protected $rules = [];
@@ -42,6 +38,8 @@ class Dice extends Route
      */
     protected $faker;
 
+    protected $priorities = ['rr1s', 'rr2s', 'rad1', 'rad2', 'rak3', 'sort', 'rsort'];
+
     public function __construct($container)
     {
         parent::__construct($container);
@@ -58,9 +56,8 @@ class Dice extends Route
     public function __invoke(Request $request, Response $response)
     {
         $pattern = strtolower($request->getAttribute('pattern', '1d20'));
-        $this->rule = strtolower($request->getAttribute('rule'));
         //TODO: For future implementation of multiple rules.
-        //$this->rules =  explode('/', $request->getAttribute('rules'));
+        $this->rules = explode('/', $request->getAttribute('rules'));
 
         if (!stristr($pattern, 'd')) {
             $this->container->logger->error("Bad Pattern: " . $pattern);
@@ -68,7 +65,7 @@ class Dice extends Route
         }
         list($this->pool, $tempSides) = explode('d', $pattern);
 
-        if (stristr($tempSides, ' ')) {
+        if (stristr($tempSides, ' ') || stristr($tempSides, '+')) {
             list($this->sides, $this->bonus) = explode(' ', $tempSides);
         } elseif (stristr($tempSides, '-')) {
             list($this->sides, $this->bonus) = explode('-', $tempSides);
@@ -83,43 +80,15 @@ class Dice extends Route
 
         $this->roll['total'] = 0;
         $this->roll['rolls'] = [];
+        $this->basicRoll();
 
-        switch ($this->rule) {
-            case 'rak3':
-                $keep = substr($this->rule, -1, 1);
-                if ($this->pool < $keep) {
-                    $this->container->logger->error('Roll and Keep ' . $keep . ' requires a pool equal to or greater than ' . $keep);
-                    throw new \Exception('Roll and Drop ' . $keep . ' requires a pool equal to or greater than ' . $keep);
-                }
-                $this->basicRoll();
-                $this->rollAndKeep($keep);
-                break;
-            case 'rad1':
-            case 'rad2':
-                $drop = substr($this->rule, -1, 1);
-                if ($this->pool <= $drop) {
-                    $this->container->logger->error('Roll and Drop ' . $drop . ' requires a pool greater than ' . $drop);
-                    throw new \Exception('Roll and Drop ' . $drop . ' requires a pool greater than ' . $drop);
-                }
-                $this->basicRoll();
-                $this->rollAndDropLowestDice($drop);
-                break;
-            case 'rr1s':
-            case 'rr2s':
-                $numberToReRoll = substr($this->rule, -2, 1);
-                if ($this->sides <= $numberToReRoll) {
-                    $this->container->logger->error('To use ReRoll ' . $numberToReRoll . 's the number of sides must be greater than ' . $numberToReRoll . '.');
-                    throw new \Exception('To use ReRoll ' . $numberToReRoll . 's the number of sides must be greater than ' . $numberToReRoll . '.');
-                }
-                $this->rerollThresholdAndBelow($numberToReRoll);
-                break;
-            case 'sort':
-                $this->basicRoll();
-                rsort($this->roll['rolls']);
-                break;
-            default:
-                $this->basicRoll();
+        // TODO: simplify rad, rak, and rrXs so we don't have to define each one.
+        foreach ($this->priorities as $key => $priority) {
+            if (in_array($priority, $this->rules)) {
+                $this->doPriority($priority);
+            }
         }
+
         $this->roll['total'] = array_sum($this->roll['rolls']) + $this->bonus;
         $jsonResponse = $response->withJson($this->roll, 200);
         return $jsonResponse;
@@ -127,6 +96,8 @@ class Dice extends Route
 
     protected function basicRoll()
     {
+        // Initialize the rolls set before starting to ensure a clean result.
+        $this->roll['rolls'] = [];
         for ($rollNum = 1; $rollNum <= $this->pool; $rollNum++) {
             $currRoll = $this->getNewRoll();
             $this->roll['rolls'][] = $currRoll;
@@ -149,25 +120,12 @@ class Dice extends Route
     }
 
     /**
-     * @param int $drop
-     */
-    protected function rollAndDropLowestDice(int $drop)
-    {
-        for ($drops = 0; $drops < $drop; $drops++) {
-            $lowestRoll = min($this->roll['rolls']);
-            $trash = array_keys($this->roll['rolls'], $lowestRoll);
-            $trashKey = array_shift($trash);
-            $this->roll['throwaway'][] = $this->roll['rolls'][$trashKey];
-            unset($this->roll['rolls'][$trashKey]);
-            $this->roll['rolls'] = array_merge($this->roll['rolls']);
-        }
-    }
-
-    /**
      * @param int $numberToReRoll
      */
     protected function rerollThresholdAndBelow(int $numberToReRoll)
     {
+        // Initialize the rolls set before starting to ensure a clean result.
+        $this->roll['rolls'] = [];
         for ($rollNum = 1; $rollNum <= $this->pool; $rollNum++) {
             $currRoll = $this->getNewRoll(true, $numberToReRoll);
             $this->roll['rolls'][] = $currRoll;
@@ -175,22 +133,95 @@ class Dice extends Route
     }
 
     /**
+     * @param int $drop
+     */
+    protected function rollAndDropLowestDice(int $drop)
+    {
+        // TODO: RaD seems to force a sort(). Fix? If possible?
+        $keepers = $this->roll['rolls'];
+        $trashers = [];
+
+
+        for ($drops = 0; $drops < $drop; $drops++) {
+            $lowestRoll = min($keepers);
+            $trashKeys = array_keys($keepers, $lowestRoll);
+            $trashKey = array_shift($trashKeys);
+            $trashers[] = $keepers[$trashKey];
+            unset($keepers[$trashKey]);
+            $keepers = array_merge($keepers);
+        }
+        $this->roll['rolls'] = $keepers;
+        if (!empty($this->roll['throwaway'])) {
+            $this->roll['throwaway'] = array_merge($trashers, $this->roll['throwaway']);
+        } else {
+            $this->roll['throwaway'] = $trashers;
+        }
+
+    }
+
+    /**
      * @param int $keep
      */
     protected function rollAndKeep(int $keep)
     {
-        $trash = $this->roll['rolls'];
+        // TODO: RaK seems to force a sort(). Fix? If possible?
+        $trashers = $this->roll['rolls'];
         $keepers = [];
 
         for ($checks = 0; $checks < $keep; $checks++) {
-            $bestRoll = max($trash);
-            $keepKeys = array_keys($trash, $bestRoll);
+            $bestRoll = max($trashers);
+            $keepKeys = array_keys($trashers, $bestRoll);
             $keepKey = array_shift($keepKeys);
-            $keepers[] = $trash[$keepKey];
-            unset($trash[$keepKey]);
-            $trash = array_merge($trash);
+            $keepers[] = $trashers[$keepKey];
+            unset($trashers[$keepKey]);
+            $trashers = array_merge($trashers);
         }
         $this->roll['rolls'] = $keepers;
-        $this->roll['throwaway'] = $trash;
+        if (!empty($this->roll['throwaway'])) {
+            $this->roll['throwaway'] = array_merge($trashers, $this->roll['throwaway']);
+        } else {
+            $this->roll['throwaway'] = $trashers;
+        }
     }
+
+    protected function doPriority($rule)
+    {
+        switch ($rule) {
+            case 'rr1s':
+            case 'rr2s':
+                $numberToReRoll = substr($rule, -2, 1);
+                if ($this->sides <= $numberToReRoll) {
+                    $this->container->logger->error('To use ReRoll ' . $numberToReRoll . 's the number of sides must be greater than ' . $numberToReRoll . '.');
+                    throw new \Exception('To use ReRoll ' . $numberToReRoll . 's the number of sides must be greater than ' . $numberToReRoll . '.');
+                }
+                $this->rerollThresholdAndBelow($numberToReRoll);
+                break;
+            case 'rak3':
+                $keep = substr($rule, -1, 1);
+                if (count($this->roll['rolls']) < $keep) {
+                    $this->container->logger->error('Roll and Keep ' . $keep . ' requires a pool equal to or greater than ' . $keep);
+                    throw new \Exception('Roll and Drop ' . $keep . ' requires a pool equal to or greater than ' . $keep);
+                }
+                $this->rollAndKeep($keep);
+                break;
+            case 'rad1':
+            case 'rad2':
+                $drop = substr($rule, -1, 1);
+                if (count($this->roll['rolls']) <= $drop) {
+                    $this->container->logger->error('Roll and Drop ' . $drop . ' requires a pool greater than ' . $drop);
+                    throw new \Exception('Roll and Drop ' . $drop . ' requires a pool greater than ' . $drop);
+                }
+                $this->rollAndDropLowestDice($drop);
+                break;
+            case 'sort':
+                rsort($this->roll['rolls']);
+                break;
+            case 'rsort':
+                sort($this->roll['rolls']);
+                break;
+            default:
+        }
+
+    }
+
 }
