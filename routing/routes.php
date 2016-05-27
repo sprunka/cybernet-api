@@ -15,7 +15,7 @@ $app->get('/hello/{name}', function (Request $request, Response $response) {
 
 //Simple Dice Roller
 $app->get('/roll[/{pattern}[/{rule}]]', 'CybernetAPI\Roll\Dice');
-$app->get('/choose/name[/{firstLastFull}[/{gender}]]', 'CybernetAPI\Choose\PersonName');
+$app->get('/choose/name[/{gender}[/{firstLastFull}]]', 'CybernetAPI\Choose\PersonName');
 
 //TODO: Implement allowance for multiple rules?
 //$app->get('/roll[/{pattern}[/{rules:.*}]]', 'CybernetAPI\Roll\Dice');
