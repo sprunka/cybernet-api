@@ -9,10 +9,15 @@
 namespace CybernetAPI;
 
 
-class AbstractRoute
+abstract class AbstractRoute
 {
+    protected $help = [];
     public function __construct($container)
     {
         $this->container = $container;
+    }
+    public function getHelp()
+    {
+        return (object)$this->help;
     }
 }

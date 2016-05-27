@@ -12,6 +12,20 @@ use Slim\Http\Response as Response;
  */
 class Dice extends Route
 {
+    protected $help = [
+        'path'      => '/roll/{pattern}/{rule1}/{rule2}/.../{ruleX}',
+        'pattern'   => 'TODO: document pattern rules.'
+    ];
+    protected $priorities = [
+        'rr1s'  => 'Reroll 1s',
+        'rr2s'  => 'Reroll 1s and 2s',
+        'rad1'  => 'Roll and Drop lowest die',
+        'rad2'  => 'Roll and Drop lowest 2 dice',
+        'rak3'  => 'Roll and Keep highest 3 dice',
+        'sort'  => 'Sorts the results, High to Low',
+        'rsort' => 'Sorts the results, Low to High'
+    ];
+
     /**
      * @var array
      */
@@ -37,8 +51,6 @@ class Dice extends Route
      * @var \Faker\Generator
      */
     protected $faker;
-
-    protected $priorities = ['rr1s', 'rr2s', 'rad1', 'rad2', 'rak3', 'sort', 'rsort'];
 
     public function __construct($container)
     {
@@ -83,7 +95,7 @@ class Dice extends Route
         $this->basicRoll();
 
         // TODO: simplify rad, rak, and rrXs so we don't have to define each one.
-        foreach ($this->priorities as $key => $priority) {
+        foreach ($this->priorities as $priority => $definition) {
             if (in_array($priority, $this->rules)) {
                 $this->doPriority($priority);
             }
@@ -224,4 +236,9 @@ class Dice extends Route
 
     }
 
+    public function getHelp()
+    {
+        $this->help['priorities'] = $this->priorities;
+        return (object) $this->help;
+    }
 }
