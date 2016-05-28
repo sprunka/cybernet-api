@@ -1,7 +1,9 @@
 <?php
 use Psr7Middlewares\Middleware;
 
+// Start PHP session
 putenv("ENV=dev");
+session_start();
 
 
 require '../vendor/autoload.php';
