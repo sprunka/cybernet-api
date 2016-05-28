@@ -20,3 +20,7 @@ $container['faker'] = function ($c) {
     $faker = Faker\Factory::create();
     return $faker;
 };
+
+$container['csrf'] = function ($c) {
+    return new \Slim\Csrf\Guard;
+};
