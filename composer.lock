@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "61dfaa11b0c27e708f2f4c985c4a3e69",
-    "content-hash": "4a2ae9514e407ee3fe3d53354f1cebc9",
+    "hash": "ab26e61f868a2de71a56b83eb330259e",
+    "content-hash": "e410d929a97e090f911323188b7ad636",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -33,66 +33,6 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "time": "2014-12-30 15:22:37"
-        },
-        {
-            "name": "filp/whoops",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/filp/whoops.git",
-                "reference": "8828aaa2178e0a19325522e2a45282ff0a14649b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/8828aaa2178e0a19325522e2a45282ff0a14649b",
-                "reference": "8828aaa2178e0a19325522e2a45282ff0a14649b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.9"
-            },
-            "require-dev": {
-                "mockery/mockery": "0.9.*",
-                "phpunit/phpunit": "^4.8 || ^5.0",
-                "symfony/var-dumper": "~3.0"
-            },
-            "suggest": {
-                "symfony/var-dumper": "Pretty print complex values better with var-dumper available",
-                "whoops/soap": "Formats errors as SOAP responses"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Whoops\\": "src/Whoops/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Filipe Dobreira",
-                    "homepage": "https://github.com/filp",
-                    "role": "Developer"
-                }
-            ],
-            "description": "php error handling for cool kids",
-            "homepage": "https://github.com/filp/whoops",
-            "keywords": [
-                "error",
-                "exception",
-                "handling",
-                "library",
-                "whoops",
-                "zf2"
-            ],
-            "time": "2016-05-06 18:25:35"
         },
         {
             "name": "fzaninotto/faker",
@@ -150,12 +90,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "6d2cfa63c9d7c03abd1284c2c4e8a9b310cd5062"
+                "reference": "814fb340ceec2e8e1ac4f62d52b6e6550c63491b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/6d2cfa63c9d7c03abd1284c2c4e8a9b310cd5062",
-                "reference": "6d2cfa63c9d7c03abd1284c2c4e8a9b310cd5062",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/814fb340ceec2e8e1ac4f62d52b6e6550c63491b",
+                "reference": "814fb340ceec2e8e1ac4f62d52b6e6550c63491b",
                 "shasum": ""
             },
             "require": {
@@ -168,13 +108,13 @@
             "require-dev": {
                 "aws/aws-sdk-php": "^2.4.9",
                 "doctrine/couchdb": "~1.0@dev",
-                "graylog2/gelf-php": "~1.0",
+                "graylog2/gelf-php": "1.3.x-dev",
                 "jakub-onderka/php-parallel-lint": "0.9",
                 "php-amqplib/php-amqplib": "~2.4",
                 "php-console/php-console": "^3.1.3",
-                "phpunit/phpunit": "^5.0",
-                "raven/raven": "^0.13",
+                "phpunit/phpunit": "^5.3",
                 "ruflin/elastica": ">=0.90 <3.0",
+                "sentry/sentry": "^0.13",
                 "swiftmailer/swiftmailer": "~5.3"
             },
             "suggest": {
@@ -186,9 +126,9 @@
                 "mongodb/mongodb": "Allow sending log messages to a MongoDB server (via library)",
                 "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
                 "php-console/php-console": "Allow sending log messages to Google Chrome",
-                "raven/raven": "Allow sending log messages to a Sentry server",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+                "sentry/sentry": "Allow sending log messages to a Sentry server"
             },
             "type": "library",
             "extra": {
@@ -219,7 +159,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-05-06 12:26:03"
+            "time": "2016-05-27 13:41:24"
         },
         {
             "name": "nikic/fast-route",
@@ -547,6 +487,51 @@
             "time": "2016-01-06 21:40:42"
         },
         {
+            "name": "sgolemon/table-flip",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sgolemon/table-flip.git",
+                "reference": "c660f791e0d23a202d3134d97dd44068cd14a507"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sgolemon/table-flip/zipball/c660f791e0d23a202d3134d97dd44068cd14a507",
+                "reference": "c660f791e0d23a202d3134d97dd44068cd14a507",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/TableFlip.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Public Domain"
+            ],
+            "authors": [
+                {
+                    "name": "Sara Golemon",
+                    "email": "pollita@php.net",
+                    "homepage": "https://twitter.com/SaraMG",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Essential exception class needed by every good project.",
+            "homepage": "https://github.com/sgolemon/table-flip",
+            "keywords": [
+                "exception",
+                "fun",
+                "rage",
+                "table-flip"
+            ],
+            "time": "2016-05-28 07:34:05"
+        },
+        {
             "name": "slim/csrf",
             "version": "0.6.0",
             "source": {
@@ -595,109 +580,6 @@
                 "slim"
             ],
             "time": "2015-12-22 10:13:02"
-        },
-        {
-            "name": "slim/http",
-            "version": "0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/slimphp/Slim-Http.git",
-                "reference": "ccdd630c1c20da3737126d860c407f37ccfabb57"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/slimphp/Slim-Http/zipball/ccdd630c1c20da3737126d860c407f37ccfabb57",
-                "reference": "ccdd630c1c20da3737126d860c407f37ccfabb57",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6.0",
-                "psr/http-message": "^1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Slim\\Http\\": "src",
-                    "Slim\\Tests\\Http\\": "tests"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Rob Allen",
-                    "email": "rob@akrabat.com",
-                    "homepage": "http://akrabat.com"
-                },
-                {
-                    "name": "Josh Lockhart",
-                    "email": "hello@joshlockhart.com",
-                    "homepage": "https://joshlockhart.com"
-                },
-                {
-                    "name": "Andrew Smith",
-                    "email": "a.smith@silentworks.co.uk",
-                    "homepage": "http://silentworks.co.uk"
-                }
-            ],
-            "description": "Strict PSR-7 implementation",
-            "homepage": "http://slimframework.com",
-            "keywords": [
-                "http",
-                "psr-7",
-                "psr7"
-            ],
-            "time": "2015-12-23 23:39:35"
-        },
-        {
-            "name": "slim/light",
-            "version": "0.1.1",
-            "target-dir": "Slim/Light",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/larrydarrelc/Slim-Light.git",
-                "reference": "67e38ca25e12eac7351f5dcf57cad7324730ddb3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/larrydarrelc/Slim-Light/zipball/67e38ca25e12eac7351f5dcf57cad7324730ddb3",
-                "reference": "67e38ca25e12eac7351f5dcf57cad7324730ddb3",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "slim/slim": ">=2.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Slim\\Light": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Larry Darrelc",
-                    "email": "larrydarrelc@gmail.com"
-                }
-            ],
-            "description": "Enhance Slim framework lightly.",
-            "keywords": [
-                "enhancemnt",
-                "slimphp"
-            ],
-            "time": "2014-02-04 15:09:24"
         },
         {
             "name": "slim/pdo",
@@ -751,12 +633,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/slimphp/Slim.git",
-                "reference": "dbd275b11d791635d74df04135cd0ab3dbefdb0f"
+                "reference": "30cfe3c07dac28ec1129c0577e64b90ba11a54c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slimphp/Slim/zipball/dbd275b11d791635d74df04135cd0ab3dbefdb0f",
-                "reference": "dbd275b11d791635d74df04135cd0ab3dbefdb0f",
+                "url": "https://api.github.com/repos/slimphp/Slim/zipball/30cfe3c07dac28ec1129c0577e64b90ba11a54c4",
+                "reference": "30cfe3c07dac28ec1129c0577e64b90ba11a54c4",
                 "shasum": ""
             },
             "require": {
@@ -813,44 +695,7 @@
                 "micro",
                 "router"
             ],
-            "time": "2016-05-19 06:59:38"
-        },
-        {
-            "name": "whoops/soap",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/whoops-php/soap.git",
-                "reference": "3a20e2b037bc49ff7f909db2694740ceb1b1be50"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/whoops-php/soap/zipball/3a20e2b037bc49ff7f909db2694740ceb1b1be50",
-                "reference": "3a20e2b037bc49ff7f909db2694740ceb1b1be50",
-                "shasum": ""
-            },
-            "require-dev": {
-                "filp/whoops": "^2.0-dev",
-                "phpunit/phpunit": "^4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Whoops\\Handler\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Markus Staab",
-                    "email": "maggus.staab@googlemail.com"
-                }
-            ],
-            "description": "Soap handler for Whoops",
-            "time": "2015-11-23 20:11:17"
+            "time": "2016-05-26 08:20:33"
         },
         {
             "name": "willdurand/negotiation",
@@ -1057,12 +902,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "7ca4182b3acbd19ebbf3ced4dfee12487d9c05aa"
+                "reference": "f9a8140d6cf86514a64fb3b637e716008e1885d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/7ca4182b3acbd19ebbf3ced4dfee12487d9c05aa",
-                "reference": "7ca4182b3acbd19ebbf3ced4dfee12487d9c05aa",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/f9a8140d6cf86514a64fb3b637e716008e1885d0",
+                "reference": "f9a8140d6cf86514a64fb3b637e716008e1885d0",
                 "shasum": ""
             },
             "require": {
@@ -1111,7 +956,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2016-05-09 09:25:40"
+            "time": "2016-05-27 08:33:35"
         },
         {
             "name": "phpunit/dbunit",
@@ -1174,12 +1019,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "5c8dd64bb3b3f4842933aa8c2876787b6c479229"
+                "reference": "44cd8e3930e431658d1a5de7d282d5cb37837fd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/5c8dd64bb3b3f4842933aa8c2876787b6c479229",
-                "reference": "5c8dd64bb3b3f4842933aa8c2876787b6c479229",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/44cd8e3930e431658d1a5de7d282d5cb37837fd5",
+                "reference": "44cd8e3930e431658d1a5de7d282d5cb37837fd5",
                 "shasum": ""
             },
             "require": {
@@ -1229,7 +1074,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-05-04 11:47:27"
+            "time": "2016-05-27 16:24:29"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1493,19 +1338,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "5d8c2a839d2c77757b7499eb135f34f9f5f07e6f"
+                "reference": "5bf0ba29dd683ec4f2e5d4fb212ad31827501012"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/5d8c2a839d2c77757b7499eb135f34f9f5f07e6f",
-                "reference": "5d8c2a839d2c77757b7499eb135f34f9f5f07e6f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/5bf0ba29dd683ec4f2e5d4fb212ad31827501012",
+                "reference": "5bf0ba29dd683ec4f2e5d4fb212ad31827501012",
                 "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "^1.0.2",
-                "php": ">=5.6",
-                "phpunit/php-text-template": "~1.2",
-                "sebastian/exporter": "~1.2"
+                "php": "^5.6 || ^7.0",
+                "phpunit/php-text-template": "^1.2",
+                "sebastian/exporter": "^1.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.4"
@@ -1541,7 +1386,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-04-20 14:39:30"
+            "time": "2016-05-26 06:15:46"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -2062,12 +1907,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "641bbd0fc1b671f896f7815169587dced3588f5c"
+                "reference": "34b1e0c1fec0b6557cc75ec0a468b030eb222656"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/641bbd0fc1b671f896f7815169587dced3588f5c",
-                "reference": "641bbd0fc1b671f896f7815169587dced3588f5c",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/34b1e0c1fec0b6557cc75ec0a468b030eb222656",
+                "reference": "34b1e0c1fec0b6557cc75ec0a468b030eb222656",
                 "shasum": ""
             },
             "require": {
@@ -2103,7 +1948,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-05-14 15:06:20"
+            "time": "2016-05-24 18:14:09"
         }
     ],
     "aliases": [],
@@ -2114,7 +1959,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6"
+        "php": "^5.6 || ^7.0"
     },
     "platform-dev": []
 }
