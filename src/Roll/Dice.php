@@ -22,8 +22,8 @@ class Dice extends Route
         'rad1'  => 'Roll and Drop lowest die',
         'rad2'  => 'Roll and Drop lowest 2 dice',
         'rak3'  => 'Roll and Keep highest 3 dice',
-        'sort'  => 'Sorts the results, High to Low',
-        'rsort' => 'Sorts the results, Low to High'
+        'rsort' => 'Sorts the results, High to Low',
+        'sort'  => 'Sorts the results, Low to High'
     ];
 
     /**
@@ -62,7 +62,7 @@ class Dice extends Route
     /**
      * @param Request $request
      * @param Response $response
-     * @return string JSON Encoded
+     * @return Response (JSON Encoded Content)
      * @throws \Exception
      */
     public function __invoke(Request $request, Response $response)
@@ -226,16 +226,19 @@ class Dice extends Route
                 $this->rollAndDropLowestDice($drop);
                 break;
             case 'sort':
-                rsort($this->roll['rolls']);
-                break;
             case 'rsort':
-                sort($this->roll['rolls']);
+                $rule($this->roll['rolls']);
                 break;
             default:
         }
 
     }
 
+    /**
+     * Formats the Help Array as an Object for use with The Help Route.
+     *
+     * @return \stdClass
+     */
     public function getHelp()
     {
         $this->help['priorities'] = $this->priorities;
