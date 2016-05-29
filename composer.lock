@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ab26e61f868a2de71a56b83eb330259e",
-    "content-hash": "e410d929a97e090f911323188b7ad636",
+    "hash": "d611450754c150ccfcb2cf98ffed7c8e",
+    "content-hash": "fce0d8c8715b3d1490112370d364023a",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -83,6 +83,58 @@
                 "fixtures"
             ],
             "time": "2016-05-19 20:16:37"
+        },
+        {
+            "name": "gofabian/negotiation-middleware",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gofabian/negotiation-middleware.git",
+                "reference": "298e14298189f42572a61c2fcb9186c0c331b737"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gofabian/negotiation-middleware/zipball/298e14298189f42572a61c2fcb9186c0c331b737",
+                "reference": "298e14298189f42572a61c2fcb9186c0c331b737",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "psr/http-message": "1.0",
+                "willdurand/negotiation": "2.0.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8",
+                "satooshi/php-coveralls": "0.6.1"
+            },
+            "suggest": {
+                "slim/slim": "The negotiation middleware is compatible to Slim 3.x"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gofabian\\Negotiation\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabian Iffländer",
+                    "homepage": "http://gofabian.de/"
+                }
+            ],
+            "description": "PHP negotiation middleware for accept headers of PSR-7 requests. Uses the negotiation library willdurand/negotiation.",
+            "homepage": "https://github.com/gofabian/negotiation-middleware",
+            "keywords": [
+                "middleware",
+                "negotiation",
+                "psr-7",
+                "slim"
+            ],
+            "time": "2015-11-02 18:33:37"
         },
         {
             "name": "monolog/monolog",
@@ -206,16 +258,16 @@
         },
         {
             "name": "oscarotero/psr7-middlewares",
-            "version": "v3.15.1",
+            "version": "v3.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oscarotero/psr7-middlewares.git",
-                "reference": "d5bc1cd2a39d6d1e4a0433dec222e86a86f9db83"
+                "reference": "d604f1844c12af03996eed879ead9f97ab32555f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/psr7-middlewares/zipball/d5bc1cd2a39d6d1e4a0433dec222e86a86f9db83",
-                "reference": "d5bc1cd2a39d6d1e4a0433dec222e86a86f9db83",
+                "url": "https://api.github.com/repos/oscarotero/psr7-middlewares/zipball/d604f1844c12af03996eed879ead9f97ab32555f",
+                "reference": "d604f1844c12af03996eed879ead9f97ab32555f",
                 "shasum": ""
             },
             "require": {
@@ -294,7 +346,7 @@
                 "psr-7",
                 "psr-messages"
             ],
-            "time": "2016-05-06 11:54:18"
+            "time": "2016-05-28 11:46:50"
         },
         {
             "name": "paragonie/random_compat",
@@ -392,7 +444,7 @@
         },
         {
             "name": "psr/http-message",
-            "version": "dev-master",
+            "version": "1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message.git",
@@ -487,51 +539,6 @@
             "time": "2016-01-06 21:40:42"
         },
         {
-            "name": "sgolemon/table-flip",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sgolemon/table-flip.git",
-                "reference": "c660f791e0d23a202d3134d97dd44068cd14a507"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sgolemon/table-flip/zipball/c660f791e0d23a202d3134d97dd44068cd14a507",
-                "reference": "c660f791e0d23a202d3134d97dd44068cd14a507",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/TableFlip.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Public Domain"
-            ],
-            "authors": [
-                {
-                    "name": "Sara Golemon",
-                    "email": "pollita@php.net",
-                    "homepage": "https://twitter.com/SaraMG",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Essential exception class needed by every good project.",
-            "homepage": "https://github.com/sgolemon/table-flip",
-            "keywords": [
-                "exception",
-                "fun",
-                "rage",
-                "table-flip"
-            ],
-            "time": "2016-05-28 07:34:05"
-        },
-        {
             "name": "slim/csrf",
             "version": "0.6.0",
             "source": {
@@ -583,16 +590,16 @@
         },
         {
             "name": "slim/pdo",
-            "version": "1.9.8",
+            "version": "1.9.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FaaPz/Slim-PDO.git",
-                "reference": "5f766ca63b8a8e45e7a27acaa3edadb1cf5e55a8"
+                "reference": "2c3cf655e04859d0284a79997213616cb5e5282a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FaaPz/Slim-PDO/zipball/5f766ca63b8a8e45e7a27acaa3edadb1cf5e55a8",
-                "reference": "5f766ca63b8a8e45e7a27acaa3edadb1cf5e55a8",
+                "url": "https://api.github.com/repos/FaaPz/Slim-PDO/zipball/2c3cf655e04859d0284a79997213616cb5e5282a",
+                "reference": "2c3cf655e04859d0284a79997213616cb5e5282a",
                 "shasum": ""
             },
             "require": {
@@ -625,7 +632,7 @@
                 "pdo",
                 "slim"
             ],
-            "time": "2016-02-27 16:38:28"
+            "time": "2016-05-29 10:56:40"
         },
         {
             "name": "slim/slim",
@@ -699,23 +706,20 @@
         },
         {
             "name": "willdurand/negotiation",
-            "version": "dev-master",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/willdurand/Negotiation.git",
-                "reference": "5154ac7346ed2821dd55e2b70cb865d54f7cbca7"
+                "reference": "a99d19330bfaa050fd09c3b8a10fc8ac258b9a55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/5154ac7346ed2821dd55e2b70cb865d54f7cbca7",
-                "reference": "5154ac7346ed2821dd55e2b70cb865d54f7cbca7",
+                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/a99d19330bfaa050fd09c3b8a10fc8ac258b9a55",
+                "reference": "a99d19330bfaa050fd09c3b8a10fc8ac258b9a55",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.5"
             },
             "type": "library",
             "extra": {
@@ -747,7 +751,7 @@
                 "header",
                 "negotiation"
             ],
-            "time": "2016-03-08 21:43:10"
+            "time": "2015-10-02 12:52:52"
         }
     ],
     "packages-dev": [
@@ -1907,12 +1911,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "34b1e0c1fec0b6557cc75ec0a468b030eb222656"
+                "reference": "737c6a22a9a2f6ac3d4c62a0b97720e139c4a093"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/34b1e0c1fec0b6557cc75ec0a468b030eb222656",
-                "reference": "34b1e0c1fec0b6557cc75ec0a468b030eb222656",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/737c6a22a9a2f6ac3d4c62a0b97720e139c4a093",
+                "reference": "737c6a22a9a2f6ac3d4c62a0b97720e139c4a093",
                 "shasum": ""
             },
             "require": {
@@ -1948,7 +1952,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-05-24 18:14:09"
+            "time": "2016-05-29 09:50:57"
         }
     ],
     "aliases": [],
