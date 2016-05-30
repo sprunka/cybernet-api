@@ -10,6 +10,7 @@ require '../vendor/autoload.php';
 $config = [];
 require_once '../config/general.php';
 require_once '../config/db.php';
+require_once '../config/statblockrules.php';
 
 $app = new \Slim\App(["settings" => $config]);
 $container = $app->getContainer();

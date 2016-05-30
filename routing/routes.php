@@ -8,6 +8,8 @@ $app->get('/help[/{what:.*}]', 'CybernetAPI\Help');
 $app->get('/choose/help[/{what:.*}]', 'CybernetAPI\Help');
 $app->get('/roll/help[/{what:.*}]', 'CybernetAPI\Help');
 
+//StatBlock Generator
+$app->get('/roll/stats[/{variant}]', 'CybernetAPI\Roll\StatBlock');
 //Simple Dice Roller
 $app->get('/roll[/{pattern}[/{rules:.*}]]', 'CybernetAPI\Roll\Dice');
 
