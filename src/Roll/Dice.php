@@ -13,17 +13,17 @@ use Slim\Http\Response as Response;
 class Dice extends Route
 {
     protected $help = [
-        'path'      => '/roll/{pattern}/{rule1}/{rule2}/.../{ruleX}',
-        'pattern'   => 'TODO: document pattern rules.'
+        'path' => '/roll/{pattern}/{rule1}/{rule2}/.../{ruleX}',
+        'pattern' => 'TODO: document pattern rules.'
     ];
     protected $priorities = [
-        'rr1s'  => 'Reroll 1s',
-        'rr2s'  => 'Reroll 1s and 2s',
-        'rad1'  => 'Roll and Drop lowest die',
-        'rad2'  => 'Roll and Drop lowest 2 dice',
-        'rak3'  => 'Roll and Keep highest 3 dice',
+        'rr1s' => 'Reroll 1s',
+        'rr2s' => 'Reroll 1s and 2s',
+        'rad1' => 'Roll and Drop lowest die',
+        'rad2' => 'Roll and Drop lowest 2 dice',
+        'rak3' => 'Roll and Keep highest 3 dice',
         'rsort' => 'Sorts the results, High to Low',
-        'sort'  => 'Sorts the results, Low to High'
+        'sort' => 'Sorts the results, Low to High'
     ];
 
     /**
@@ -68,40 +68,10 @@ class Dice extends Route
     public function __invoke(Request $request, Response $response)
     {
         $pattern = strtolower($request->getAttribute('pattern', '1d20'));
-        //TODO: For future implementation of multiple rules.
         $this->rules = explode('/', $request->getAttribute('rules'));
 
-        if (!stristr($pattern, 'd')) {
-            $this->container->logger->error("Bad Pattern: " . $pattern);
-            throw new \Exception('Bad pattern given');
-        }
-        list($this->pool, $tempSides) = explode('d', $pattern);
+        $this->rollTheBones($pattern);
 
-        if (stristr($tempSides, ' ') || stristr($tempSides, '+')) {
-            list($this->sides, $this->bonus) = explode(' ', $tempSides);
-        } elseif (stristr($tempSides, '-')) {
-            list($this->sides, $this->bonus) = explode('-', $tempSides);
-            $this->bonus = -(int)$this->bonus;
-        } else {
-            $this->sides = $tempSides;
-        }
-
-        //TODO: Add more error checking against $pool and $sides being integers?
-        $this->pool = ($this->pool !== '' ? (int)$this->pool : 1);
-        $this->sides = ($this->sides !== '' ? (int)$this->sides : 20);
-
-        $this->roll['total'] = 0;
-        $this->roll['rolls'] = [];
-        $this->basicRoll();
-
-        // TODO: simplify rad, rak, and rrXs so we don't have to define each one.
-        foreach ($this->priorities as $priority => $definition) {
-            if (in_array($priority, $this->rules)) {
-                $this->doPriority($priority);
-            }
-        }
-
-        $this->roll['total'] = array_sum($this->roll['rolls']) + $this->bonus;
         $jsonResponse = $response->withJson($this->roll, 200);
         return $jsonResponse;
     }
@@ -198,32 +168,38 @@ class Dice extends Route
 
     protected function doPriority($rule)
     {
+        $tempRule = substr($rule,0,3);
+        if ($tempRule == 'rak' || $tempRule == 'rad') {
+            $keepOrDrop = substr($rule, -1, 1);
+            $rule = $tempRule;
+        }
+        $tempRule = substr($rule,0,2);
+        if ($tempRule == 'rr') {
+            $numberToReRoll = substr($rule, -2, 1);
+            $rule = $tempRule;
+        }
+
         switch ($rule) {
-            case 'rr1s':
-            case 'rr2s':
-                $numberToReRoll = substr($rule, -2, 1);
+            case 'rr':
                 if ($this->sides <= $numberToReRoll) {
                     $this->container->logger->error('To use ReRoll ' . $numberToReRoll . 's the number of sides must be greater than ' . $numberToReRoll . '.');
                     throw new \Exception('To use ReRoll ' . $numberToReRoll . 's the number of sides must be greater than ' . $numberToReRoll . '.');
                 }
                 $this->rerollThresholdAndBelow($numberToReRoll);
                 break;
-            case 'rak3':
-                $keep = substr($rule, -1, 1);
-                if (count($this->roll['rolls']) < $keep) {
-                    $this->container->logger->error('Roll and Keep ' . $keep . ' requires a pool equal to or greater than ' . $keep);
-                    throw new \Exception('Roll and Drop ' . $keep . ' requires a pool equal to or greater than ' . $keep);
+            case 'rak':
+                if (count($this->roll['rolls']) < $keepOrDrop) {
+                    $this->container->logger->error('Roll and Keep ' . $keepOrDrop . ' requires a pool equal to or greater than ' . $keepOrDrop);
+                    throw new \Exception('Roll and Drop ' . $keepOrDrop . ' requires a pool equal to or greater than ' . $keepOrDrop);
                 }
-                $this->rollAndKeep($keep);
+                $this->rollAndKeep($keepOrDrop);
                 break;
-            case 'rad1':
-            case 'rad2':
-                $drop = substr($rule, -1, 1);
-                if (count($this->roll['rolls']) <= $drop) {
-                    $this->container->logger->error('Roll and Drop ' . $drop . ' requires a pool greater than ' . $drop);
-                    throw new \Exception('Roll and Drop ' . $drop . ' requires a pool greater than ' . $drop);
+            case 'rad':
+                if (count($this->roll['rolls']) <= $keepOrDrop) {
+                    $this->container->logger->error('Roll and Drop ' . $keepOrDrop . ' requires a pool greater than ' . $keepOrDrop);
+                    throw new \Exception('Roll and Drop ' . $keepOrDrop . ' requires a pool greater than ' . $keepOrDrop);
                 }
-                $this->rollAndDropLowestDice($drop);
+                $this->rollAndDropLowestDice($keepOrDrop);
                 break;
             case 'sort':
             case 'rsort':
@@ -231,7 +207,6 @@ class Dice extends Route
                 break;
             default:
         }
-
     }
 
     /**
@@ -242,6 +217,50 @@ class Dice extends Route
     public function getHelp()
     {
         $this->help['priorities'] = $this->priorities;
-        return (object) $this->help;
+        return (object)$this->help;
+    }
+
+    public function rollTheBones($pattern)
+    {
+        if (stristr($pattern, ':')) {
+            $boom = explode(':', $pattern);
+            $pattern = $boom[0];
+            $this->rules = $boom;
+        }
+
+        if (!stristr($pattern, 'd')) {
+            $this->container->logger->error("Bad Pattern: " . $pattern);
+            throw new \Exception('Bad pattern given');
+        }
+
+        list($this->pool, $tempSides) = explode('d', $pattern);
+
+        if (stristr($tempSides, ' ')) {
+            list($this->sides, $this->bonus) = explode(' ', $tempSides);
+        } elseif (stristr($tempSides, '+')) {
+            list($this->sides, $this->bonus) = explode('+', $tempSides);
+        } elseif (stristr($tempSides, '-')) {
+            list($this->sides, $this->bonus) = explode('-', $tempSides);
+            $this->bonus = -(int)$this->bonus;
+        } else {
+            $this->sides = $tempSides;
+        }
+
+        //TODO: Add more error checking against $pool and $sides being integers?
+        $this->pool = ($this->pool !== '' ? (int)$this->pool : 1);
+        $this->sides = ($this->sides !== '' ? (int)$this->sides : 20);
+
+        $this->roll['total'] = 0;
+        $this->roll['rolls'] = [];
+        $this->basicRoll();
+
+        // TODO: simplify rad, rak, and rrXs so we don't have to define each one.
+        foreach ($this->priorities as $priority => $definition) {
+            if (in_array($priority, $this->rules)) {
+                $this->doPriority($priority);
+            }
+        }
+
+        return $this->roll['total'] = array_sum($this->roll['rolls']) + $this->bonus;
     }
 }
