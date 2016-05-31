@@ -19,7 +19,7 @@ class StatBlock extends AbstractRoute
         'standard' => '4d6:rak3:flex',
         'hardcore' => '3d6:fixed',
         'heroic' => '1d10+8:flex',
-        'heroicfixed' => '1d10+8:fixed',
+        'heroic_ordered' => '1d10+8:fixed',
         'unique' => '6d6:rak3:rr2s:fixed'
     ];
     protected $variant = 'standard';

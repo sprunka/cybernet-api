@@ -26,7 +26,7 @@ class Help extends Route
 
         $pathSegments = explode('/', $path);
         array_pop($pathSegments);
-        $whatSegemnts = explode('/', $what);
+        $whatSegments = explode('/', $what);
 
         // To get help for a specific route, analyze the path and the "what" segments
         // TODO: Write help docs for routes and methods.

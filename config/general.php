@@ -1,6 +1,6 @@
 <?php
 /**
- * If you have access to command line, setup the environment var ENV to equal your current enviornnment:
+ * If you have access to command line, setup the environment var ENV to equal your current environment:
  * dev, stage, prod
  * If you do not have access to environment vars, or
  * if you do not set a value for ENV the app will run in production mode.

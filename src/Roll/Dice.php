@@ -169,10 +169,12 @@ class Dice extends Route
     protected function doPriority($rule)
     {
         $tempRule = substr($rule,0,3);
+        $keepOrDrop = 0;
         if ($tempRule == 'rak' || $tempRule == 'rad') {
             $keepOrDrop = substr($rule, -1, 1);
             $rule = $tempRule;
         }
+        $numberToReRoll = 0;
         $tempRule = substr($rule,0,2);
         if ($tempRule == 'rr') {
             $numberToReRoll = substr($rule, -2, 1);
