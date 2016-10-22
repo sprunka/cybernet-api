@@ -5,12 +5,11 @@ use Psr7Middlewares\Middleware;
 putenv("ENV=dev");
 session_start();
 
-
 require '../vendor/autoload.php';
 $config = [];
 require_once '../config/general.php';
 require_once '../config/db.php';
-require_once '../config/statBlockRules.php';
+require_once '../config/statblockrules.php';
 
 $app = new \Slim\App(["settings" => $config]);
 $container = $app->getContainer();
@@ -21,7 +20,6 @@ $app->add(Middleware::TrailingSlash(false)->redirect(301))
     ->add(Middleware::ResponseTime())
     ->add(Middleware::FormatNegotiator()->defaultFormat('json'))
     ->add($container->get('csrf'));
-
 
 require_once '../routing/routes.php';
 $app->run();

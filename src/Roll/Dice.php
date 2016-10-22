@@ -123,7 +123,6 @@ class Dice extends Route
         $keepers = $this->roll['rolls'];
         $trashers = [];
 
-
         for ($drops = 0; $drops < $drop; $drops++) {
             $lowestRoll = min($keepers);
             $trashKeys = array_keys($keepers, $lowestRoll);

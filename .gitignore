@@ -3,3 +3,5 @@
 !/logs/.placeholder
 /config/db.php
 server.bat
+tmp/*
+!/tmp/.placeholder
