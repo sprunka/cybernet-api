@@ -132,12 +132,12 @@ class Dice extends Route
             $keepers = array_merge($keepers);
         }
         $this->roll['rolls'] = $keepers;
-        if (!empty($this->roll['throwaway'])) {
-            $this->roll['throwaway'] = array_merge($trashers, $this->roll['throwaway']);
-        } else {
+        if (empty($this->roll['throwaway'])) {
             $this->roll['throwaway'] = $trashers;
+            return;
         }
-
+        $this->roll['throwaway'] = array_merge($trashers, $this->roll['throwaway']);
+        return;
     }
 
     /**
@@ -158,11 +158,14 @@ class Dice extends Route
             $trashers = array_merge($trashers);
         }
         $this->roll['rolls'] = $keepers;
-        if (!empty($this->roll['throwaway'])) {
-            $this->roll['throwaway'] = array_merge($trashers, $this->roll['throwaway']);
-        } else {
+
+        if (empty($this->roll['throwaway'])) {
             $this->roll['throwaway'] = $trashers;
+            return;
         }
+
+        $this->roll['throwaway'] = array_merge($trashers, $this->roll['throwaway']);
+        return;
     }
 
     protected function doPriority($rule)
@@ -236,6 +239,7 @@ class Dice extends Route
 
         list($this->pool, $tempSides) = explode('d', $pattern);
 
+        // TODO: Refactor w/o "else"
         if (stristr($tempSides, ' ')) {
             list($this->sides, $this->bonus) = explode(' ', $tempSides);
         } elseif (stristr($tempSides, '+')) {
