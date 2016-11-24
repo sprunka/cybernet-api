@@ -1,7 +1,9 @@
+*.idea*
 /vendor/*
 /logs/*
 !/logs/.placeholder
 /config/db.php
 server.bat
+server.sh
 tmp/*
 !/tmp/.placeholder
