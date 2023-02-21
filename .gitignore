@@ -7,3 +7,7 @@ server.bat
 server.sh
 tmp/*
 !/tmp/.placeholder
+
+public/info.php
+
+composer
